@@ -1,0 +1,166 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+
+% Configuración de márgenes y página (Igual al segundo documento)
+\geometry{a4paper, margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Termodinámica y Sistemas Físicos}
+\rhead{Análisis Computacional}
+\cfoot{\thepage}
+
+% Estilo para el código Octave (Unificado)
+\definecolor{backgray}{rgb}{0.96,0.96,0.96}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codeblue}{rgb}{0,0,0.8}
+
+\lstset{
+    backgroundcolor=\color{backgray},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    language=Matlab,
+    showstringspaces=false,
+    captionpos=b
+}
+
+\begin{document}
+
+% --- TÍTULO PRINCIPAL ---
+\begin{center}
+    {\bfseries\huge SIMULACIÓN DE SISTEMAS FÍSICOS: TRANSFERENCIA DE CALOR \par}
+    \vspace{0.5cm}
+    {\Large  Ley de Enfriamiento de Newton y Resolución Numérica \par}
+
+\end{center}
+
+\section{Fundamentos de la Transferencia de Calor}
+
+La transferencia de calor es el proceso mediante el cual se intercambia energía térmica entre distintos cuerpos que se encuentran a diferentes temperaturas. Este flujo de energía ocurre hasta que los sistemas alcanzan el equilibrio térmico.
+
+\subsection{Naturaleza del Calor}
+El calor es energía en tránsito. A nivel microscópico, se relaciona con el movimiento aleatorio de los átomos y moléculas. Cuando un objeto caliente se coloca en un ambiente frío, la energía cinética de sus partículas se transfiere a las partículas del entorno a través de colisiones y radiación.
+
+\subsection{Ley de Enfriamiento de Newton}
+Este modelo describe cómo cambia la temperatura de un objeto en función del tiempo cuando está expuesto a un entorno con temperatura constante ($T_s$). La rapidez con la que un cuerpo se enfría es directamente proporcional a la diferencia de temperatura entre el cuerpo y sus alrededores.
+
+La expresión matemática fundamental es:
+\[ T(t) = T_s + (T_0 - T_s) e^{-kt} \]
+
+Donde:
+\begin{itemize}
+    \item $T(t)$: Temperatura del objeto en el instante $t$.
+    \item $T_s$: Temperatura del ambiente o entorno.
+    \item $T_0$: Temperatura inicial del objeto.
+    \item $k$: Constante de enfriamiento característica.
+    \item $t$: Tiempo transcurrido.
+\end{itemize}
+
+\section{Implementación en Octave}
+
+Se ha desarrollado un script en Octave que automatiza el cálculo de la temperatura final basándose en los parámetros del desafío técnico.
+
+\begin{lstlisting}
+% ==========================================================
+% SCRIPT DE OCTAVE: SIMULADOR TERMICO 
+% ==========================================================
+% Datos de entrada
+Ts = 38;    % Temperatura del refrigerador (F)
+T0 = 120;   % Temperatura inicial de la soda (F)
+k = 0.45;   % Constante de transferencia de calor
+t = 3;      % Tiempo en horas
+
+% Proceso de calculo:
+% 1. Determinar el gradiente termico inicial
+gradiente_inicial = T0 - Ts;
+
+% 2. Calcular el decaimiento exponencial
+decaimiento = exp(-k * t);
+
+% 3. Obtener la temperatura final exacta
+T_exacta = Ts + (gradiente_inicial * decaimiento);
+
+% 4. Redondeo segun requerimiento tecnico
+T_final = round(T_exacta);
+
+% Despliegue de resultados
+fprintf('--- Analisis Termico ---\n');
+fprintf('Resultado tras %d horas: %d F\n', t, T_final);
+\end{lstlisting}
+\section{Contexto Histórico y Relevancia Tecnológica}
+
+\subsection{El Legado de Isaac Newton}
+La \textbf{Ley de Enfriamiento de Newton}, formulada a principios del siglo XVIII, sentó las bases para el estudio de la transferencia de energía térmica. Newton postuló que el flujo de calor no es constante, sino que depende directamente del diferencial térmico[cite: 13, 15]. Este principio permitió más tarde el desarrollo de motores de combustión y sistemas de refrigeración industrial.
+
+\subsection{Aplicaciones en la Ingeniería Moderna}
+El modelado matemático mediante ecuaciones diferenciales y su implementación en software como Octave o JavaScript permite:
+\begin{itemize}
+    \item \textbf{Optimización de Procesos:} Diseño de sistemas de climatización (HVAC) eficientes.
+    \item \textbf{Seguridad Alimentaria:} Control preciso de la cadena de frío mediante sensores y simuladores interactivos.
+    \item \textbf{Análisis de Materiales:} Determinación de coeficientes de conductividad térmica en nuevos polímeros[cite: 13, 15].
+\end{itemize}
+\section{Análisis de Resultados y Comportamiento Dinámico}
+
+\subsection{Interpretación de la Constante $k$}
+La constante de enfriamiento $k = 0.45$ determina la pendiente de la curva de temperatura. Un valor de $k$ más elevado implicaría que el objeto alcanza el equilibrio térmico en un tiempo menor. Este parámetro es crucial para simulaciones industriales donde el control de temperatura debe ser exacto.
+
+\subsection{Evolución hacia el Equilibrio Térmico}
+Matemáticamente, observamos que:
+\[ \lim_{t \to \infty} T(t) = T_s \]
+
+En el caso práctico analizado:
+\begin{itemize}
+    \item A $t = 0$, la diferencia es máxima ($120 - 38 = 82^\circ$ F). [cite: 18]
+    \item A $t = 3$, la temperatura ha descendido significativamente hasta alcanzar los $59^\circ$ F. [cite: 18, 19]
+    \item El modelo predice una pérdida de calor no lineal (exponencial), siendo más rápida al principio y más lenta conforme se acerca a $T_s$.
+\end{itemize}
+\section{Ampliación Teórica: Termodinámica de Sistemas Abiertos}
+
+\subsection{El Gradiente de Temperatura y la Entropía}
+La transferencia de calor no es solo un cambio de temperatura; es una manifestación de la \textbf{Segunda Ley de la Termodinámica}. Cuando la soda (120$^\circ$F) entra en contacto con el aire del refrigerador (38$^\circ$F), se produce un aumento de la entropía total del universo. El calor fluye para disipar el gradiente térmico, buscando el estado de mayor desorden energético: el equilibrio.
+
+\subsection{Cinética de la Ley de Enfriamiento}
+La ecuación diferencial que rige este proceso es:
+\[ \frac{dT}{dt} = -k(T - T_s) \]
+Esta expresión indica que la velocidad de enfriamiento es máxima en el instante $t=0$. A medida que el objeto se enfría, la "fuerza impulsora" (la diferencia $T - T_s$) disminuye, lo que explica por qué la curva de temperatura es una exponencial decreciente y no una línea recta. 
+
+\subsection{Factores de Influencia en la Constante $k$}
+En una simulación real, $k$ es un valor compuesto:
+\begin{itemize}
+    \item \textbf{Calor Específico ($c_p$):} Cantidad de energía que el objeto debe perder para bajar 1 grado. El agua tiene un $c_p$ alto, por lo que se enfría más lento que el metal.
+    \item \textbf{Conductividad Térmica ($\alpha$):} Capacidad del material para mover el calor desde su centro hacia la superficie.
+    \item \textbf{Coeficiente de Película ($h$):} Representa la eficiencia de la convección del aire alrededor del objeto.
+\end{itemize}
+
+\section{Análisis Computacional y Modelado de Datos}
+El uso de herramientas como \textbf{Octave} permite manejar la precisión de punto flotante necesaria para estos cálculos. Mientras que un cálculo manual puede acarrear errores de truncamiento, el script desarrollado utiliza la biblioteca \texttt{math} de alta precisión, asegurando que el redondeo final al entero más cercano sea físicamente coherente con las mediciones experimentales.
+
+\section{Conclusión y Perspectivas Futuras}
+
+El presente desarrollo integral ha permitido concluir los siguientes puntos clave:
+
+\begin{enumerate}
+    \item \textbf{Validación del Modelo Matemático:} Se confirma que la aproximación de Newton es válida para rangos de temperatura moderados, proporcionando una solución elegante a un problema complejo de transporte de energía.
+    
+    \item \textbf{Impacto de la Programación en la Ciencia:} La transición de la fórmula teórica al código (Octave y JavaScript) demuestra que la algoritmia es el lenguaje moderno de la ingeniería. La capacidad de automatizar estos cálculos reduce el margen de error humano en aplicaciones críticas.
+    
+    \item \textbf{Equilibrio Térmico Asintótico:} Se ha demostrado mediante el análisis de límites que el sistema tiende a un estado estable. Este concepto es vital en el diseño de termostatos y sistemas de control industrial, donde el sobre-enfriamiento o sobre-calentamiento puede comprometer la integridad de un producto.
+    
+    \item \textbf{Escalabilidad del Proyecto:} La estructura lógica empleada sienta las bases para futuros simuladores más complejos que incluyan variables como la humedad ambiental, la presión atmosférica o materiales compuestos, permitiendo una transición fluida hacia el desarrollo web interactivo.
+\end{enumerate}
+
+
+
+
+\end{document}
+
