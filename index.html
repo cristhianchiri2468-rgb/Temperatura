@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe Técnico: Análisis Combinatorio - UMSA</title>
+</head>
+<body>
+
+    <hr>
+    <center>
+        <h1>SIMULACIÓN DE SISTEMAS PROBABILÍSTICOS</h1>
+        <p><b>Autor:</b> Pablo | <b>Institución:</b> Universidad Mayor de San Andrés</p>
+        <p><b>Fecha:</b> Mayo, 2026</p>
+    </center>
+    <hr>
+
+    <h2>1. Contexto Histórico: El Origen de la Probabilidad</h2>
+    <p>
+        La teoría que sustenta este simulador nació en el siglo XVII (1654) a través de la correspondencia entre <b>Blaise Pascal</b> y <b>Pierre de Fermat</b>. Lo que comenzó como una solución a problemas de repartición de apuestas en juegos de azar, evolucionó hasta convertirse en la base de la estadística moderna y la física cuántica.
+    </p>
+
+    <h2>2. Conceptos Fundamentales</h2>
+    
+    <h3>2.1. Invarianza de Orden (Combinaciones)</h3>
+    <p>
+        En este modelo, utilizamos <b>Combinaciones sin reemplazo</b>. A diferencia de las permutaciones, aquí el orden de los elementos no altera el resultado. Matemáticamente, esto se logra dividiendo el total de arreglos por el factorial de la muestra (r!), lo que elimina las repeticiones redundantes.
+    </p>
+
+    <h3>2.2. Independencia Estocástica</h3>
+    <p>
+        El sistema analiza eventos independientes (como dos bombos de sorteo distintos). Al no existir correlación entre ellos, el espacio muestral total (Ω) se halla mediante el <b>Principio Multiplicativo</b>.
+    </p>
+
+    <h2>3. Simulador Interactivo</h2>
+    <p>Modifica los valores para observar el cálculo en tiempo real:</p>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <td>
+                <b>Entradas (Input):</b><br><br>
+                N (Población): <input type="number" id="n" value="59" oninput="calcular()"><br><br>
+                R (Muestra): <input type="number" id="r" value="5" oninput="calcular()">
+            </td>
+            <td>
+                <b>Resultados (Output):</b><br><br>
+                Espacio Muestral (Ω): <b id="resOmega">0</b><br><br>
+                Probabilidad de Éxito: <b id="resProb">0</b>
+            </td>
+        </tr>
+    </table>
+
+    <h2>4. Funcionamiento del Algoritmo</h2>
+    <p>
+        El código JavaScript implementado replica la lógica de la función <code>nchoosek</code> de Octave. 
+    </p>
+    <ul>
+        <li><b>Prevención de Overflow:</b> En lugar de calcular factoriales masivos (como 59!) que desbordarían la memoria, el algoritmo utiliza un bucle iterativo que multiplica y divide de forma alternada.</li>
+        <li><b>Optimización:</b> Utiliza la propiedad de simetría de las combinaciones para reducir el número de iteraciones cuando R es mayor a la mitad de N.</li>
+        <li><b>Precisión:</b> Se aplica <code>Math.round</code> para asegurar que el resultado sea un número entero puro, eliminando errores de precisión decimal.</li>
+    </ul>
+
+    <hr>
+    <center>
+        <p>Facultad de Ciencias Puras y Naturales - UMSA 2026</p>
+    </center>
+
+    <script>
+        function calcularCombinaciones(n, r) {
+            if (r > n) return 0;
+            if (r === 0 || r === n) return 1;
+            if (r > n / 2) r = n - r; // Simetría: C(n,r) = C(n, n-r)
+
+            let resultado = 1;
+            for (let i = 1; i <= r; i++) {
+                resultado = resultado * (n - i + 1) / i;
+            }
+            return Math.round(resultado);
+        }
+
+        function calcular() {
+            // Obtener valores
+            const nVal = parseInt(document.getElementById('n').value) || 0;
+            const rVal = parseInt(document.getElementById('r').value) || 0;
+
+            // Procesar
+            const omega = calcularCombinaciones(nVal, rVal);
+            const probabilidad = omega > 0 ? (1 / omega) : 0;
+
+            // Imprimir
+            document.getElementById('resOmega').innerText = omega.toLocaleString();
+            document.getElementById('resProb').innerText = probabilidad.toExponential(6);
+        }
+
+        // Ejecutar al cargar la página
+        window.onload = calcular;
+    </script>
+
+</body>
+</html>
